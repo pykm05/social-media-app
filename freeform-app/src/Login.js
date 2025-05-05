@@ -84,7 +84,7 @@ function Login() {
                     />
                     <br/>
                     <input
-                        type = "text"
+                        type = "password"
                         class = "border-b border-black border-opacity-50 w-2/3 outline-none focus:outline-none"
                         placeholder = "Password"
                         value = {password}

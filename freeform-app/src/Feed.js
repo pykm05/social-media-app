@@ -1,58 +1,73 @@
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
-    
+    const freeformButton = () => {
+        navigate("/feed");
+    }
 
     return (
-        <div class = "bg-custom-dark min-w-[750px] min-h-[500px]">
-            {/* Navbar */}
-            <div class = "flex bg-custom-dark2 text-white justify-between w-full border-b h-[10vh] min-h-[50px]">
-                {/* Logo on the left side */}
-                <div class = "flex gap-1 items-center text-2xl pl-5 font-extrabold font-inter">
-                    <img src = "images/logo512.png" alt = "logo" class = "w-auto h-[1em]"></img>
-                    FEED FORM HAHAHAHAHA
-                </div>
-
-                {/* Buttons on the right side */}
-                <div class = "flex items-center pr-5 gap-4 font-sans">
-                    <button class = "text-white">
-                        About Us
-                    </button>
-                </div>
+        <div class = "bg-custom-dark min-w-[750px] min-h-[500px] w-full h-[100vh]">
+            <div>
+                <title>Feed</title>
             </div>
 
-            {/* Body */}
-            <div class = "text-white font-sans">
-                <div class = "flex pl-4 pr-4 pt-4 pb-4 justify-between w-full h-[90vh] min-h-[450px] gap-4 border-b">
-                    <div class = "flex items-center justify-left p-10 bg-custom-dark3 w-2/3 h-full rounded">
-                        <div class = "flex-col">
-                            <div class = "font-extrabold font-inter text-8xl">
-                                <div class = "cream-text-shadow text-orange-100 drop-shadow-2xl">Think it</div>
-                                <div class = "yellow-text-shadow text-yellow-100">Speak it</div>
-                            </div>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <div class = "white-text-shadow font-semibold font-inter text-xl">
-                                Speak your mind, share the moment
-                            </div>
+            <div class = "flex flex-row">
+                <div class = "flex flex-col fixed gap-4 w-1/5 min-w-[150px] h-[100vh] bg-custom-dark3 border-r-2 font-inter text-white justify-between text-xl">
+                    <div class = "gap-4 pt-4 border-b">
+                        <button onClick={freeformButton} class="text-2xl font-extrabold border-b w-full pb-4">Freeform</button>
+                        <div class = "flex flex-col justify-between p-4 items-center gap-1">
+                            <div class = "pb-4 font-bold underline">Username</div>
+                            <button class = "w-full hover:bg-custom-dark4 rounded transition-colors pt-3 pb-3">Profile</button>
+                            <button class = "w-full hover:bg-custom-dark4 rounded transition-colors pt-3 pb-3">Friend List</button>
+                            <button class = "w-full hover:bg-custom-dark4 rounded transition-colors pt-3 pb-3">Friend Requests</button>
                         </div>
                     </div>
-                    <div class = "flex items-center justify-center bg-custom-cream w-1/3 h-full rounded">
-                        <div class = "flex flex-col font-inter items-center font-inter">
-                            <div class = "text-2xl font-extrabold text-black text-center">
-                            Join our community today
-                            </div>
-                            <br/>
-                        </div>
+
+                    <div>
+                        <button class="text-xl p-4 border-t w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors">Logout</button>
                     </div>
                 </div>
-            </div>
-
-            <div class = "pl-2 text-white">
-                2025 Freeform. All rights reserved.
+                <div class = "ml-[20%] p-5 text-white font-inter x-1/5 w-4/5 overflow-y-auto bg-custom-dark">
+                <p>Item 1</p>
+                <p>Item 2</p>
+      <p>Item 3</p>
+      <p>Item 4</p>
+      <p>Item 5</p>
+      <p>Item 6</p>
+      <p>Item 7</p>
+      <p>Item 8</p>
+      <p>Item 9</p>
+      <p>Item 10</p>
+      <p>Item 2</p>
+      <p>Item 3</p>
+      <p>Item 4</p>
+      <p>Item 5</p>
+      <p>Item 6</p>
+      <p>Item 7</p>
+      <p>Item 8</p>
+      <p>Item 9</p>
+      <p>Item 10</p>
+      <p>Item 2</p>
+      <p>Item 3</p>
+      <p>Item 4</p>
+      <p>Item 5</p>
+      <p>Item 6</p>
+      <p>Item 7</p>
+      <p>Item 8</p>
+      <p>Item 9</p>
+      <p>Item 10</p>
+      <p>Item 2</p>
+      <p>Item 3</p>
+      <p>Item 4</p>
+      <p>Item 5</p>
+      <p>Item 6</p>
+      <p>Item 7</p>
+      <p>Item 8</p>
+      <p>Item 9</p>
+      <p>Item 10</p>
+                </div>
             </div>
         </div>
     );
