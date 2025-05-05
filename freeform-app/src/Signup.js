@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
     // Navigate
@@ -12,13 +12,13 @@ function Signup() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     /*const ping = () => {
-        fetch('http://localhost:8080/api/test')
+        fetch("http://localhost:8080/api/test")
         .then(response => response.text())
         .then(data => {
-            console.log('Response from server:', data);
+            console.log("Response from server:", data);
         })
         .catch(error => {
-            console.error('Error fetching data:', error);
+            console.error("Error fetching data:", error);
         });
     };*/
 
@@ -26,13 +26,13 @@ function Signup() {
         if (isSubmitting) return;
         setIsSubmitting(true);
         
-        return fetch('http://localhost:8080/api/createaccount', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+        return fetch("http://localhost:8080/api/createaccount", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
         })
         .then(async response => {
-            if (!response.ok) throw new Error('Failed to create user');
+            if (!response.ok) throw new Error("Failed to create user");
             
             const feedbackNow = await response.text();
             setFeedback(feedbackNow);
@@ -45,7 +45,7 @@ function Signup() {
         })
         .catch(error => {
             console.error(error);
-            setFeedback('An error occurred while creating the account');
+            setFeedback("An error occurred while creating the account");
             setIsSubmitting(false);
         });
     };

@@ -3,6 +3,7 @@ package com.example.demo;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -11,9 +12,11 @@ import java.sql.*;
 public class UserDAO {
 
     private DataSource dataSource;
+    private SessionManager sessionManager;
 
-    public UserDAO(DataSource dataSource){
+    public UserDAO(DataSource dataSource, SessionManager sessionManager){
         this.dataSource = dataSource;
+        this.sessionManager = sessionManager;
     }
 
     public String createUser(String username, String password) {
@@ -33,6 +36,30 @@ public class UserDAO {
 
             connection.close();
             return "account created";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "error";
+    }
+
+    public String loginUser(String username, String password) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement getPassword = connection.prepareStatement("SELECT password FROM users WHERE username = ?");
+            getPassword.setString(1, username);
+            try (ResultSet rs = getPassword.executeQuery()) {
+                if (rs.next()) {
+                    if (hashPassword(password).equals(rs.getString(1))){
+                        connection.close();
+                        return sessionManager.createSession(username);
+                    } else {
+                        connection.close();
+                        return "Incorrect password";
+                    }
+                } else {
+                    connection.close();
+                    return "User not found";
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

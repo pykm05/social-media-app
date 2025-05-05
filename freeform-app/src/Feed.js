@@ -1,15 +1,9 @@
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 
 function Home() {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
-    const signupButton = () => {
-        navigate("/signup")
-    }
     
-    const loginButton = () => {
-        navigate("/login")
-    }
 
     return (
         <div class = "bg-custom-dark min-w-[750px] min-h-[500px]">
@@ -18,17 +12,13 @@ function Home() {
                 {/* Logo on the left side */}
                 <div class = "flex gap-1 items-center text-2xl pl-5 font-extrabold font-inter">
                     <img src = "images/logo512.png" alt = "logo" class = "w-auto h-[1em]"></img>
-                    Freeform
+                    FEED FORM HAHAHAHAHA
                 </div>
 
                 {/* Buttons on the right side */}
                 <div class = "flex items-center pr-5 gap-4 font-sans">
                     <button class = "text-white">
                         About Us
-                    </button>
-
-                    <button onClick = {loginButton} class = "text-white bg-gray-600 pt-1 pb-1 pl-3 pr-3 rounded">
-                        Log in
                     </button>
                 </div>
             </div>
@@ -56,7 +46,6 @@ function Home() {
                             Join our community today
                             </div>
                             <br/>
-                            <button onClick = {signupButton} class = "bg-black pt-2 pb-2 pl-4 pr-4 rounded">Sign up</button>
                         </div>
                     </div>
                 </div>

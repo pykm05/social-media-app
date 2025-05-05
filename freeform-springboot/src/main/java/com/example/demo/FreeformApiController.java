@@ -14,9 +14,11 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 public class FreeformApiController {
     private UserDAO dao;
+    private SessionManager sessionManager;
 
-    public FreeformApiController(UserDAO userDAO){
+    public FreeformApiController(UserDAO userDAO, SessionManager sessionManager){
         dao = userDAO;
+        this.sessionManager = sessionManager;
     }
 
     // Test endpoint
@@ -48,12 +50,38 @@ public class FreeformApiController {
             return "Username is invalid (4-50 characters)";
         }
 
-        if (password.length() <= 4){
+        if (password.length() < 4){
             return "Password too short (4+ characters)";
         }
 
         System.out.println(username + " | " + password);
         return dao.createUser(username, hashPassword(password));
+    }
+
+    @PostMapping("/api/login")
+    public String loginUser(@RequestBody Map<String, String> data){
+        String username = data.get("username");
+        String password = data.get("password");
+
+        if (username.contains(" ") || username.length() > 50 || username.length() < 4) {
+            return "Invalid Username";
+        }
+
+        if (password.length() < 4){
+            return "Invalid Password";
+        }
+
+        System.out.println(username + " | " + password);
+        return dao.loginUser(username, password);
+    }
+
+    @PostMapping("/api/validatesession")
+    public String validateSession(@RequestBody Map<String, String> data){
+        String sessionId = data.get("SessionId");
+        if (sessionManager.validateSession(sessionId)){
+            return "Valid session";
+        }
+        return "Invalid session";
     }
 
     public static String hashPassword(String password){
