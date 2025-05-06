@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export function Post({ profilePic, username, postDate, postTitle, postContent }) {
+export function Post({ username, postDate, postTitle, postContent }) {
     const [votes, setVotes] = useState(0);
 
     return (

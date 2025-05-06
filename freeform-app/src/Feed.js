@@ -37,14 +37,12 @@ function Home() {
 
             <main className="flex-1 flex flex-col min-w-[250px] max-w-[1000px] overflow-y-auto p-6 bg-custom-dark text-black gap-4">
                 <Post
-                    profilePic="e"
                     username="J Pork"
                     postDate="Sep 21"
                     postTitle="TITLE OF POST"
                     postContent="banana"
                 />
                 <Post
-                    profilePic="e"
                     username="Another User"
                     postDate="Sep 22"
                     postTitle="Another Post"
