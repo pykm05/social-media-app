@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
+import CreatePost from "./components/CreatPost.jsx"
+
 function Home() {
     const navigate = useNavigate();
 
@@ -29,44 +31,8 @@ function Home() {
                         <button class="text-xl p-4 border-t w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors">Logout</button>
                     </div>
                 </div>
-                <div class = "ml-[20%] p-5 text-white font-inter x-1/5 w-4/5 overflow-y-auto bg-custom-dark">
-                <p>Item 1</p>
-                <p>Item 2</p>
-      <p>Item 3</p>
-      <p>Item 4</p>
-      <p>Item 5</p>
-      <p>Item 6</p>
-      <p>Item 7</p>
-      <p>Item 8</p>
-      <p>Item 9</p>
-      <p>Item 10</p>
-      <p>Item 2</p>
-      <p>Item 3</p>
-      <p>Item 4</p>
-      <p>Item 5</p>
-      <p>Item 6</p>
-      <p>Item 7</p>
-      <p>Item 8</p>
-      <p>Item 9</p>
-      <p>Item 10</p>
-      <p>Item 2</p>
-      <p>Item 3</p>
-      <p>Item 4</p>
-      <p>Item 5</p>
-      <p>Item 6</p>
-      <p>Item 7</p>
-      <p>Item 8</p>
-      <p>Item 9</p>
-      <p>Item 10</p>
-      <p>Item 2</p>
-      <p>Item 3</p>
-      <p>Item 4</p>
-      <p>Item 5</p>
-      <p>Item 6</p>
-      <p>Item 7</p>
-      <p>Item 8</p>
-      <p>Item 9</p>
-      <p>Item 10</p>
+                <div class = "ml-[20%] p-5 text-white font-inter x-1/5 w-4/5 overflow-y-auto bg-custom-dark items-center">
+                    <CreatePost/>
                 </div>
             </div>
         </div>
