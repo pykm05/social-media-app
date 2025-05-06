@@ -12,6 +12,7 @@ import Home from "./Home.js"
 import Signup from "./Signup.js"
 import Login from "./Login.js"
 import Feed from "./Feed.js"
+import Profile from "./Profile.js"
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path = "/signup" element = {<Signup/>}/>
         <Route path = "/login" element = {<Login/>}/>
         <Route path = "/feed" element = {<Feed/>}/>
+        <Route path = "/profile" element = {<Profile/>}/>
       </Routes>
     </Router>
   );
