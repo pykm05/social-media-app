@@ -1,12 +1,26 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-//import { useParams } from "react-router-dom";
+import { FriendRequest } from "./components/FriendRequest";
 
 function FriendRequests() {
     const navigate = useNavigate();
+    const [requestSent, setRequestSent] = useState(false);
+    const [receivedRequests, setReceivedRequests] = useState([]);
 
     const freeformButton = () => {
         navigate("/feed");
     };
+
+    const handleClick = () => {
+        setRequestSent(true)
+    }
+
+    useEffect(() => {
+        setReceivedRequests(['Gustophiles', 'long nameeeeeeeeeeeee', 'j pork',
+            'j pork', 'j pork', 'j pork',
+            'j pork', 'j pork', 'j pork'
+        ]);
+    }, []);
 
     return (
         <div className="flex h-screen font-inter text-white bg-custom-dark">
@@ -34,36 +48,33 @@ function FriendRequests() {
                     </button>
                 </div>
             </div>
-            <div className="flex-grow p-8 bg-custom-dark p-6">
-                <div className="flex flex-col items-center text-center bg-custom-dark2 p-6 rounded-xl shadow-lg w-full max-w-3xl mx-auto">
-                    {/* Username Placeholder */}
-                    <div className="text-4xl font-bold text-white mb-4">FRIEND REQS REQS FRIEND HAHAHAHAHA</div>
 
-                    {/* Posts */}
-                    <div className="w-full mb-6">
-                        <div className="font-semibold text-xl text-white mb-2">Recent Posts</div>
-                        <div className="bg-custom-dark4 rounded-lg p-4 mb-2">
-                            <div className="text-white">This is a placeholder for a post.</div>
-                        </div>
-                        <div className="bg-custom-dark4 rounded-lg p-4 mb-2">
-                            <div className="text-white">Here's another placeholder for a post!</div>
+            <div className="flex-grow p-8 bg-custom-dark p-6 overflow-y-scroll min-w-[500px]tf">
+                <div className="flex flex-col bg-custom-dark2 p-6 gap-5 shadow-lg w-full max-w-3xl mx-auto">
+                    <div className="w-full border-2 p-5 rounded-lg">
+                        <div className="flex flex-col">
+                            <div className="font-semibold text-xl mb-5">Add Friend</div>
+                            <div className="flex justify-between text-black bg-custom-cream p-2 rounded">
+                                <input className="focus:outline-none bg-custom-cream w-[400px]" placeholder="Enter username..."></input>
+                                <button onClick={handleClick} className="hover:bg-custom-cream3 bg-custom-cream2 p-1 pr-5 pl-5 rounded">Send Request</button>
+                            </div>
+                            <div>
+                                {requestSent ? (<>Request sent</>) : (<></>)}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Friends Section */}
-                    <div className="w-full mb-4">
-                        <div className="font-semibold text-xl text-white mb-2">Friends</div>
-                        <div className="flex flex-wrap justify-center gap-6">
-                            <div className="w-16 h-16 bg-gray-500 rounded-full text-white flex items-center justify-center">
-                                A
-                            </div>
-                            <div className="w-16 h-16 bg-gray-500 rounded-full text-white flex items-center justify-center">
-                                B
-                            </div>
-                            <div className="w-16 h-16 bg-gray-500 rounded-full text-white flex items-center justify-center">
-                                C
-                            </div>
-                            {/* Add more friend circles as needed */}
+                    <div class="w-full border-t border-gray-300 my-4"></div>
+
+                    <div className="flex flex-col gap-4 border-2">
+                        <div>
+                            {receivedRequests.length > 0 ? (
+                                <div>
+                                    {receivedRequests.map((username, index) => (
+                                        <FriendRequest key={index} username={username} />
+                                    ))}
+                                </div>
+                            ) : (<div>No friends added</div>)}
                         </div>
                     </div>
                 </div>
