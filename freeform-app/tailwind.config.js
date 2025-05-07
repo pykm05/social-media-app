@@ -11,6 +11,8 @@ module.exports = {
         'custom-dark3': '#1f2740',
         'custom-dark4': '#6676ad',
         'custom-cream': '#f0e7c9',
+        'custom-cream2': '#e0d7b6',
+        'custom-cream3': '#bfb591',
         'custom-rosegray': '#C9E5F0',
       },
       fontFamily: {
