@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.aot.generate.GeneratedTypeReference;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -7,6 +8,10 @@ import javax.sql.DataSource;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 @Repository
 public class UserDAO {
@@ -29,9 +34,10 @@ public class UserDAO {
                 }
             }
 
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)");
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO users (username, password, date_of_creation) VALUES (?, ?, ?)");
             stmt.setString(1, username);
             stmt.setString(2, password);
+            stmt.setDate(3, Date.valueOf(LocalDate.now()));
             stmt.executeUpdate();
 
             connection.close();
@@ -64,6 +70,29 @@ public class UserDAO {
             e.printStackTrace();
         }
         return "error";
+    }
+
+    public List<Posts> getPosts(int numPosts, int offset){
+        List<Posts> reqPosts = new ArrayList<Posts>();
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement getReqPosts = connection.prepareStatement("SELECT * FROM posts ORDER BY date_of_post DESC LIMIT ? OFFSET ?");
+            getReqPosts.setInt(1, numPosts);
+            getReqPosts.setInt(2, offset);
+            try (ResultSet rs = getReqPosts.executeQuery()) {
+                while (rs.next()){
+                    Posts post = new Posts(
+                            rs.getInt("post_id"),
+                            rs.getString("title"),
+                            rs.getString("contents"),
+                            rs.getString("owner"),
+                            rs.getDate("date_of_post"));
+                    reqPosts.add(post);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reqPosts;
     }
 
     public static String hashPassword(String password){

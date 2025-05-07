@@ -2,7 +2,7 @@
 
 export function Post({ username, postDate, postTitle, postContent }) {
     return (
-        <div className="flex gap-3 min-w-[250px] bg-custom-cream p-4">
+        <div className="flex gap-3 min-w-[450px] bg-custom-cream p-4 w-full">
             <div className="flex flex-col items-center gap-3">
                 <img src="/svg/thumbs_up.svg" alt="Thumbs Up" width="20" />
                 <div>9000</div>

@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -38,6 +40,13 @@ public class FreeformApiController {
         System.out.println(message);
         return "Received message: " + message;
     }*/
+
+    @PostMapping("/api/getposts")
+    public List<Posts> getPosts(@RequestBody Map<String, Integer> data){
+        int numPosts = data.get("numPosts");
+        int offset = data.get("offset");
+        return dao.getPosts(numPosts, offset);
+    }
 
     @PostMapping("/api/createaccount")
     public String postUser(@RequestBody Map<String, String> data){
