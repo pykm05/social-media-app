@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-//import { useParams } from "react-router-dom";
+import { FriendIcon } from "./components/FriendIcon";
+import { useEffect, useState } from "react";
 
 function FriendList() {
     const navigate = useNavigate();
@@ -7,6 +8,15 @@ function FriendList() {
     const freeformButton = () => {
         navigate("/feed");
     };
+
+    const [friends, setFriends] = useState([]);
+
+    useEffect(() => {
+        setFriends(['Gustophiles','long nameeeeeeeeeeeee','j pork',
+            'j pork','j pork','j pork',
+            'j pork','j pork','j pork'
+        ]);
+    }, [])
 
     return (
         <div className="flex h-screen font-inter text-white bg-custom-dark">
@@ -34,39 +44,18 @@ function FriendList() {
                     </button>
                 </div>
             </div>
-            <div className="flex-grow p-8 bg-custom-dark p-6">
-                <div className="flex flex-col items-center text-center bg-custom-dark2 p-6 rounded-xl shadow-lg w-full max-w-3xl mx-auto">
-                    {/* Username Placeholder */}
-                    <div className="text-4xl font-bold text-white mb-4">FRIEND LIST FRIEND LIST</div>
 
-                    {/* Posts */}
-                    <div className="w-full mb-6">
-                        <div className="font-semibold text-xl text-white mb-2">Recent Posts</div>
-                        <div className="bg-custom-dark4 rounded-lg p-4 mb-2">
-                            <div className="text-white">This is a placeholder for a post.</div>
-                        </div>
-                        <div className="bg-custom-dark4 rounded-lg p-4 mb-2">
-                            <div className="text-white">Here's another placeholder for a post!</div>
-                        </div>
-                    </div>
-
-                    {/* Friends Section */}
-                    <div className="w-full mb-4">
-                        <div className="font-semibold text-xl text-white mb-2">Friends</div>
-                        <div className="flex flex-wrap justify-center gap-6">
-                            <div className="w-16 h-16 bg-gray-500 rounded-full text-white flex items-center justify-center">
-                                A
-                            </div>
-                            <div className="w-16 h-16 bg-gray-500 rounded-full text-white flex items-center justify-center">
-                                B
-                            </div>
-                            <div className="w-16 h-16 bg-gray-500 rounded-full text-white flex items-center justify-center">
-                                C
-                            </div>
-                            {/* Add more friend circles as needed */}
-                        </div>
-                    </div>
+            <div className="flex flex-grow flex-col gap-[50px] items-center p-8 bg-custom-dark overflow-y-scroll">
+                <div className="flex items-center p-3">
+                    <div className="text-4xl font-bold text-white">Friends</div>
                 </div>
+                {friends.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-auto h-auto p-5 border-2 rounded-md">
+                        {friends.map((friend, index) => (
+                            <FriendIcon key={index} username={friend}></FriendIcon>
+                        ))}
+                    </div>
+                ) : (<div>No friends added</div>)}
             </div>
         </div>
     );

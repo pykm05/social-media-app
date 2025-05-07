@@ -1,7 +1,6 @@
 //import React, { useState } from "react";
 
 export function Post({ username, postDate, postTitle, postContent }) {
-
     return (
         <div className="flex gap-3 min-w-[250px] bg-custom-cream p-4">
             <div className="flex flex-col items-center gap-3">
