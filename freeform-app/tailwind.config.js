@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/*.{html,js,jsx}",
-    "./src/components/*{jsx}"
+    "./src/components/*.{html,js,jsx}"
   ],
   theme: {
     extend: {
@@ -15,9 +15,6 @@ module.exports = {
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
-      },
-      boxShadow: {
-        
       },
     },
   },

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Post } from "./components/Post";
 
-function Home() {
+function Feed() {
     const navigate = useNavigate();
 
     const freeformButton = () => {
@@ -9,9 +9,9 @@ function Home() {
     };
 
     return (
-        <div className="flex h-screen font-inter text-white bg-custom-dark">
+        <div className="flex h-screen font-inter text-white bg-custom-dark min-w-[750px] min-h-[500px]">
             {/* Sidebar */}
-            <aside className="flex flex-col justify-between w-[250px] min-w-[200px] bg-custom-dark3 border-r-2">
+            <div className="flex flex-col justify-between w-[250px] min-w-[200px] bg-custom-dark3 border-r-2">
                 <div>
                     <button
                         onClick={freeformButton}
@@ -33,9 +33,9 @@ function Home() {
                         Logout
                     </button>
                 </div>
-            </aside>
+            </div>
 
-            <main className="flex-1 flex flex-col min-w-[250px] max-w-[1000px] overflow-y-auto p-6 bg-custom-dark text-black gap-4">
+            <div className="flex flex-col min-w-[250px] overflow-y-auto p-6 bg-custom-dark text-black gap-4">
                 <Post
                     username="J Pork"
                     postDate="Sep 21"
@@ -55,11 +55,10 @@ function Home() {
                     his is another example post contentasd;lfkj;alsdfj
                     his is another example post contentasd;lfkj;alsdfj
                     "
-                    
                 />
-            </main>
+            </div>
         </div>
     );
 }
 
-export default Home;
+export default Feed;

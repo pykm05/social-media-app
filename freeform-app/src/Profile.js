@@ -1,16 +1,18 @@
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function Profile() {
     const navigate = useNavigate();
 
     const freeformButton = () => {
-        navigate("/profile");
+        navigate("/feed");
     };
 
+    const {username} = useParams();
     return (
         <div className="flex h-screen font-inter text-white bg-custom-dark">
             {/* Sidebar */}
-            <aside className="flex flex-col justify-between w-[250px] min-w-[200px] bg-custom-dark3 border-r-2">
+            <div className="flex flex-col justify-between w-[250px] min-w-[200px] bg-custom-dark3 border-r-2">
                 <div>
                     <button
                         onClick={freeformButton}
@@ -32,11 +34,11 @@ function Profile() {
                         Logout
                     </button>
                 </div>
-            </aside>
+            </div>
             <div className="flex-grow p-8 bg-custom-dark p-6">
                 <div className="flex flex-col items-center text-center bg-custom-dark2 p-6 rounded-xl shadow-lg w-full max-w-3xl mx-auto">
                     {/* Username Placeholder */}
-                    <div className="text-4xl font-bold text-white mb-4">Username</div>
+                    <div className="text-4xl font-bold text-white mb-4">{username}</div>
 
                     {/* Posts */}
                     <div className="w-full mb-6">

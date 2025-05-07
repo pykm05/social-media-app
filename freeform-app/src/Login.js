@@ -40,7 +40,6 @@ function Login() {
             if (!response.ok) throw new Error("Failed to create user");
             
             const feedbackNow = await response.text();
-            setFeedback(feedbackNow);
     
             if (feedbackNow.match(uuidRegex)) {
                 const date = new Date();

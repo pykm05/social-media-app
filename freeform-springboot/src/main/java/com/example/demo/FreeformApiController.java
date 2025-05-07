@@ -54,7 +54,7 @@ public class FreeformApiController {
             return "Password too short (4+ characters)";
         }
 
-        System.out.println(username + " | " + password);
+        //System.out.println(username + " | " + password);
         return dao.createUser(username, hashPassword(password));
     }
 
@@ -71,7 +71,7 @@ public class FreeformApiController {
             return "Invalid Password";
         }
 
-        System.out.println(username + " | " + password);
+        //System.out.println(username + " | " + password);
         return dao.loginUser(username, password);
     }
 
