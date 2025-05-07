@@ -13,6 +13,8 @@ import Signup from "./Signup.js"
 import Login from "./Login.js"
 import Feed from "./Feed.js"
 import Profile from "./Profile.js"
+import FriendRequests from "./FriendRequests.js"
+import FriendList from "./FriendList.js"
 
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
         <Route path = "/login" element = {<Login/>}/>
         <Route path = "/feed" element = {<Feed/>}/>
         <Route path = "/profile/:username" element = {<Profile/>}/>
+        <Route path = "/friendlist" element = {<FriendList/>}/>
+        <Route path = "/friendrequests" element = {<FriendRequests/>}/>
       </Routes>
     </Router>
   );
