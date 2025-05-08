@@ -7,6 +7,18 @@ function FriendRequests() {
     const [requestSent, setRequestSent] = useState(false);
     const [receivedRequests, setReceivedRequests] = useState([]);
 
+    const profileButton = () => {
+        navigate("/profile/" + userData.username);
+    };
+
+    const friendListButton = () => {
+        navigate("/friendlist");
+    };
+
+    const friendReqButton = () => {
+        navigate("/friendrequests");
+    };
+
     const freeformButton = () => {
         navigate("/feed");
     };
@@ -69,25 +81,25 @@ function FriendRequests() {
     return (
         <div className="flex h-screen font-inter text-white bg-custom-dark">
             {/* Sidebar */}
-            <div className="flex flex-col justify-between w-[250px] min-w-[200px] bg-custom-dark3 border-r-2">
+            <div class = "flex flex-col justify-between w-[250px] min-w-[250px] bg-custom-dark3 border-r-2">
                 <div>
                     <button
                         onClick={freeformButton}
-                        className="text-2xl font-extrabold border-b w-full py-4 px-4"
+                        class = "text-2xl font-extrabold border-b w-full py-4 px-4"
                     >
                         Freeform
                     </button>
 
-                    <div className="flex flex-col p-4 gap-3">
+                    <div class = "flex flex-col p-4 gap-3">
                         <div class = "font-bold underline text-center py-4 ">{userData?.username}</div>
-                        <div className="font-bold underline text-center pb-2">Profile</div>
-                        <button className="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
-                        <button className="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
+                        <button onClick = {profileButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Profile</button>
+                        <button onClick = {friendListButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
+                        <button onClick = {friendReqButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
                     </div>
                 </div>
 
                 <div>
-                    <button className="text-xl p-4 w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors border-t">
+                    <button class = "text-xl p-4 w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors border-t">
                         Logout
                     </button>
                 </div>

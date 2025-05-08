@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { Post } from "./components/Post";
 import { useEffect } from "react";
 import React, { useState } from "react";
+import { useRef } from "react";
 
 function Feed() {
-    const numPosts = 5;
-    const [offset, setOffset] = useState(0);
+    const num = useRef(5);
+    const off = useRef(0);
 
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -13,9 +14,25 @@ function Feed() {
 
     const sessionId = null;
     const [userData, setUserData] = useState(null);
+    
+    const [contents, setPostContent] = useState("");
+    const [title, setPostTitle] = useState("");
+    const [feedback, setFeedback] = useState("");
 
     const freeformButton = () => {
         navigate("/feed");
+    };
+
+    const profileButton = () => {
+        navigate("/profile/" + userData.username);
+    };
+
+    const friendListButton = () => {
+        navigate("/friendlist");
+    };
+
+    const friendReqButton = () => {
+        navigate("/friendrequests");
     };
 
     let debounce = false;
@@ -23,8 +40,7 @@ function Feed() {
     useEffect(() => {
         if (!debounce) {
             checkSession();
-            console.log(userData);
-            getPosts();
+            getPostButton();
             debounce = true;
         }
     }, []);
@@ -67,10 +83,7 @@ function Feed() {
 
     // Load posts 
     // This is all for pagination for extra credit
-    const getPosts = () => {
-        if (isSubmitting) return;
-        setIsSubmitting(true);
-
+    const getPosts = (numPosts, offset) => {
         fetch('http://localhost:8080/api/getposts', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -81,11 +94,48 @@ function Feed() {
         })
         .then((data) => {
             setPosts(prev => [...prev, ...data]);
-            setOffset(prev => prev + numPosts);
+            off.current += numPosts;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    };
+
+    const getPostButton = () => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        getPosts(num.current, off.current);
+        setIsSubmitting(false);
+    }
+
+    const createPost = () => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        
+        const owner = userData.username;
+        const sessionId = userData.sessionId;
+        
+        return fetch("http://localhost:8080/api/createpost", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ owner, sessionId, contents, title }),
+        })
+        .then(async response => {
+            if (!response.ok) throw new Error("Failed to create post");
+            
+            const feedbackNow = await response.text();
+            setFeedback(feedbackNow);
+
+            if (feedbackNow === "Post created!"){
+                setPosts([]);
+                off.current = 0;
+                getPosts(num.current, off.current);
+            }
             setIsSubmitting(false);
         })
         .catch(error => {
             console.error(error);
+            setFeedback("An error occurred while creating the post");
             setIsSubmitting(false);
         });
     };
@@ -104,9 +154,9 @@ function Feed() {
 
                     <div class = "flex flex-col p-4 gap-3">
                         <div class = "font-bold underline text-center py-4 ">{userData?.username}</div>
-                        <button class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Profile</button>
-                        <button class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
-                        <button class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
+                        <button onClick = {profileButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Profile</button>
+                        <button onClick = {friendListButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
+                        <button onClick = {friendReqButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
                     </div>
                 </div>
 
@@ -118,6 +168,17 @@ function Feed() {
             </div>
             
             <div class = "flex flex-col min-w-[500px] overflow-y-auto p-6 bg-custom-dark text-black gap-4 flex items-center w-full">
+
+
+                <div className="flex flex-col gap-3 min-w-[450px] bg-custom-cream p-4 w-full">
+                    <div class = "text-black text-xl">Create a post!</div>
+                    <textarea placeholder = "Title" class = "p-2" value = {title} onChange = {(e) => setPostTitle(e.target.value)}/>
+                    <textarea placeholder = "Content" class = "p-2 h-[100px] text-left" value = {contents} onChange = {(e) => setPostContent(e.target.value)}/>
+                    <button onClick = {createPost} class = "p-2 rounded bg-blue-200">Post</button>
+                    {feedback && <div class = "text-purple-500 ">{feedback}</div>}
+                </div>
+
+
                 {
                     posts.length > 0 ? (posts.map(post => (
                         <Post
@@ -125,6 +186,10 @@ function Feed() {
                             postDate = {post.date}
                             postTitle = {post.title}
                             postContent = {post.contents}
+                            isprofile={false}
+                            postId={post.post_id}
+                            onlineUserSession={userData.sessionId}
+                            onlineUser={userData.username}
                         />
                     ))
                 ) : (
@@ -132,7 +197,7 @@ function Feed() {
                 )
                 }
                 
-                <button onClick = {getPosts} class = "text-l w-1/3 text-white hover:text-blue-300 transition-colors underline">Load more posts</button>
+                <button onClick = {getPostButton} class = "text-l w-1/3 text-white hover:text-blue-300 transition-colors underline">Load more posts</button>
             </div>
         </div>
     );

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 
+import static java.lang.Integer.parseInt;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class FreeformApiController {
@@ -46,6 +48,12 @@ public class FreeformApiController {
         int numPosts = data.get("numPosts");
         int offset = data.get("offset");
         return dao.getPosts(numPosts, offset);
+    }
+
+    @PostMapping("/api/getpostsbyuser")
+    public List<Posts> getPostsByUser(@RequestBody Map<String, String> data){
+        String owner = data.get("owner");
+        return dao.getPostsByUser(owner);
     }
 
     @PostMapping("/api/createaccount")
@@ -94,6 +102,71 @@ public class FreeformApiController {
     public Session validateSession(@RequestBody Map<String, String> data){
         String sessionId = data.get("SessionId");
         return sessionManager.validateSession(sessionId);
+    }
+
+    @PostMapping("/api/createcomment")
+    public String createComment(@RequestBody Map<String, String> data){
+        if (sessionManager.validateSession(data.get("sessionId")) == null){
+            return "Invalid session";
+        }
+
+        String owner = data.get("owner");
+        String contents = data.get("contents");
+        String postId = data.get("postId");
+
+        if (contents.length() <= 4 || contents.length() >= 256){
+            return "Content is invalid (4-256 characters)";
+        }
+
+        return dao.createComment(parseInt(postId), contents, owner);
+    }
+
+    @PostMapping("/api/vote")
+    public String editVote(@RequestBody Map<String, String> data){
+        if (sessionManager.validateSession(data.get("sessionId")) == null){
+            return "?";
+        }
+
+        int postId = parseInt(data.get("postId"));
+        String username = data.get("username");
+        int numVote = parseInt(data.get("numVote"));
+
+        //System.out.println(username + " | " + password);
+        return dao.editVotes(postId, username, numVote) + "";
+    }
+
+    @PostMapping("/api/getvotes")
+    public int getVotes(@RequestBody Map<String, Integer> data){
+        int postId = data.get("postId");
+        return dao.getVotes(postId);
+    }
+
+    @PostMapping("/api/createpost")
+    public String createPost(@RequestBody Map<String, String> data){
+        if (sessionManager.validateSession(data.get("sessionId")) == null){
+            return "Invalid session";
+        }
+
+        String owner = data.get("owner");
+        String title = data.get("title");
+        String contents = data.get("contents");
+
+        if (title.length() >= 50 || title.length() <= 4) {
+            return "Title is invalid (4-50 characters)";
+        }
+
+        if (contents.length() <= 4 || contents.length() >= 256){
+            return "Content is invalid (4-256 characters)";
+        }
+
+        return dao.createPost(title, contents, owner);
+    }
+
+    @PostMapping("/api/getcomments")
+    public List<Comment> getComments(@RequestBody Map<String, Integer> data){
+        Integer postId = data.get("postId");
+
+        return dao.getComments(postId);
     }
 
     public static String hashPassword(String password){

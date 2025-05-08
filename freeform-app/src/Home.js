@@ -5,11 +5,11 @@ function Home() {
 
     const signupButton = () => {
         navigate("/signup")
-    }
+    };
     
     const loginButton = () => {
         navigate("/login")
-    }
+    };
 
     return (
         <div class = "bg-custom-dark min-w-[750px] min-h-[500px]">
