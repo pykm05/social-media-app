@@ -10,7 +10,7 @@ public class Session {
     public Session(String username, String sessionId){
         this.username = username;
         this.sessionId = sessionId;
-        this.expireTime = LocalDateTime.now().plusMinutes(5);
+        this.expireTime = LocalDateTime.now().plusMinutes(20);
     }
 
     public Boolean isValid(){

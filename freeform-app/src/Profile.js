@@ -28,7 +28,6 @@ function Profile() {
         navigate("/friendrequests");
     };
 
-    const sessionId = null;
     const [userData, setUserData] = useState(null);
     let debounce = false;
     useEffect(() => {

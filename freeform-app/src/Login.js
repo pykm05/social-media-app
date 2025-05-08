@@ -43,7 +43,7 @@ function Login() {
     
             if (feedbackNow.match(uuidRegex)) {
                 const date = new Date();
-                date.setTime(date.getTime() + (5 * 60 * 1000));
+                date.setTime(date.getTime() + (20 * 60 * 1000));
                 document.cookie = "SessionId=" + feedbackNow + ";expires=" + date.toUTCString() + ";path=/";
                 navigate("/feed");
                 setFeedback("Logged In");
