@@ -2,11 +2,15 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Post } from "./components/Post";
+import { FriendIcon } from "./components/FriendIcon";
 
 function Profile() {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const { username } = useParams();
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [friends, setFriends] = useState([]);
 
     const freeformButton = () => {
         navigate("/feed");
@@ -34,6 +38,13 @@ function Profile() {
             debounce = true;
         }
     }, []);
+
+    useEffect(() => {
+        if (userData) {
+            console.log('UserData available, fetching friends...');
+            getFriends();
+        }
+    }, [userData]);
 
     // Session Checker
     const checkSession = () => {
@@ -70,6 +81,31 @@ function Profile() {
         }
         navigate("/login");
     };
+
+    const getFriends = () => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        console.log(userData)
+
+        fetch('http://localhost:8080/api/getfriends', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username }),
+        })
+            .then((response) => {
+                console.log(response)
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data)
+                setFriends(data);
+                setIsSubmitting(false);
+            })
+            .catch(error => {
+                console.error(error);
+                setIsSubmitting(false);
+            });
+    }
 
     const getPostsByUser = () => {
         const owner = username;
@@ -122,25 +158,22 @@ function Profile() {
                     <div className="text-4xl font-bold text-white mb-4">{username}</div>
 
                     {/* Friends Section */}
-                    <div className="w-full mb-4">
-                        <div className="font-semibold text-xl text-white mb-2">Friends</div>
-                        <div className="flex flex-wrap justify-center gap-6">
-                            <div className="w-16 h-16 bg-gray-500 rounded-full text-white flex items-center justify-center">
-                                A
-                            </div>
-                            <div className="w-16 h-16 bg-gray-500 rounded-full text-white flex items-center justify-center">
-                                B
-                            </div>
-                            <div className="w-16 h-16 bg-gray-500 rounded-full text-white flex items-center justify-center">
-                                C
-                            </div>
-                            {/* Add more friend circles as needed */}
+                    <div className="flex flex-grow flex-col gap-[50px] items-center p-8">
+                        <div className="flex items-center p-3">
+                            <div className="text-4xl font-bold text-white">Friends</div>
                         </div>
+                        {friends.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-auto h-auto p-5 border-2 rounded-md">
+                                {friends.map((friend, index) => (
+                                    <FriendIcon key={index} username={friend.username2}></FriendIcon>
+                                ))}
+                            </div>
+                        ) : (<div>No friends added</div>)}
                     </div>
 
                     {/* Posts */}
                     <div className="font-semibold text-xl text-white mb-2">Posts</div>
-                    <div class="flex flex-col min-w-[500px] overflow-y-auto p-6 bg-custom-dark text-black gap-4 flex w-full">
+                    <div class="flex flex-col min-w-[500px] p-6 bg-custom-dark text-black gap-4 flex w-full">
                         {
                             posts.length > 0 ? (posts.map(post => (
                                 <Post

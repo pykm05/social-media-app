@@ -4,13 +4,23 @@ import { useEffect, useState } from "react";
 
 function FriendList() {
     let username = "";
-    const numFriends = 1;
     
-    const [offset, setOffset] = useState(0);
     const navigate = useNavigate();
 
     const freeformButton = () => {
         navigate("/feed");
+    };
+
+    const profileButton = () => {
+        navigate("/profile/" + userData.username);
+    };
+
+    const friendListButton = () => {
+        navigate("/friendlist");
+    };
+
+    const friendReqButton = () => {
+        navigate("/friendrequests");
     };
 
     const [friends, setFriends] = useState([]);
@@ -108,11 +118,11 @@ function FriendList() {
                         Freeform
                     </button>
 
-                    <div className="flex flex-col p-4 gap-3">
-                        <div className = "w-full hover:bg-custom-dark4 text-center rounded py-3 transition-colors">{userData?.username}</div>
-                        <div className="font-bold underline text-center pb-2">Profile</div>
-                        <button className="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
-                        <button className="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
+                    <div class = "flex flex-col p-4 gap-3">
+                        <div class = "font-bold underline text-center py-4 ">{userData?.username}</div>
+                        <button onClick = {profileButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Profile</button>
+                        <button onClick = {friendListButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
+                        <button onClick = {friendReqButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
                     </div>
                 </div>
 
