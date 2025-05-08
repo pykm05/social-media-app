@@ -13,7 +13,11 @@ public class Session {
         this.expireTime = LocalDateTime.now().plusMinutes(20);
     }
 
-    public Boolean isValid(){
+    public Boolean isValid(String username){
+        return (this.username.equals(username)) && (LocalDateTime.now().isBefore(this.expireTime));
+    }
+
+    public Boolean getDataIfValid(){
         return LocalDateTime.now().isBefore(this.expireTime);
     }
 

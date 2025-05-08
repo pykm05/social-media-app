@@ -101,12 +101,12 @@ public class FreeformApiController {
     @PostMapping("/api/validatesession")
     public Session validateSession(@RequestBody Map<String, String> data){
         String sessionId = data.get("SessionId");
-        return sessionManager.validateSession(sessionId);
+        return sessionManager.getDataIfValid(sessionId);
     }
 
     @PostMapping("/api/createcomment")
     public String createComment(@RequestBody Map<String, String> data){
-        if (sessionManager.validateSession(data.get("sessionId")) == null){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("owner")) == null){
             return "Invalid session";
         }
 
@@ -121,9 +121,21 @@ public class FreeformApiController {
         return dao.createComment(parseInt(postId), contents, owner);
     }
 
+    @PostMapping("/api/sendfriendreq")
+    public String sendFriendReq(@RequestBody Map<String, String> data){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("owner")) == null){
+            return "Invalid session";
+        }
+
+        String sender = data.get("senderUsername");
+        String receiver = data.get("receiverUsername");
+
+        return dao.createFriendReq(sender, receiver);
+    }
+
     @PostMapping("/api/vote")
     public String editVote(@RequestBody Map<String, String> data){
-        if (sessionManager.validateSession(data.get("sessionId")) == null){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("username")) == null){
             return "?";
         }
 
@@ -143,7 +155,7 @@ public class FreeformApiController {
 
     @PostMapping("/api/createpost")
     public String createPost(@RequestBody Map<String, String> data){
-        if (sessionManager.validateSession(data.get("sessionId")) == null){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("owner")) == null){
             return "Invalid session";
         }
 

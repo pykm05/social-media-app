@@ -188,8 +188,49 @@ public class UserDAO {
         return "error";
     }
 
+    public String createFriendReq(String senderUsername, String receiverUsername){
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement uniqueness = connection.prepareStatement("SELECT" +
+                    "  (SELECT COUNT(*) FROM friend_requests WHERE sender_username = ? AND receiver_username = ?) +" +
+                    "  (SELECT COUNT(*) FROM friend_requests WHERE sender_username = ? AND receiver_username = ?) AS total_requests;");
+            uniqueness.setString(1, senderUsername);
+            uniqueness.setString(2, receiverUsername);
+            uniqueness.setString(4, senderUsername);
+            uniqueness.setString(3, receiverUsername);
+            try (ResultSet rs = uniqueness.executeQuery()){
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return "You already have a friend request to/from this person";
+                }
+            }
+
+            PreparedStatement isAlreadyFriends = connection.prepareStatement("SELECT COUNT(*) FROM (SELECT username2 FROM friends WHERE username1 = ? AND username2 = ? UNION SELECT username1 FROM friends WHERE username2 = ? AND username1 = ?) AS temp");
+            isAlreadyFriends.setString(1, senderUsername);
+            isAlreadyFriends.setString(2, receiverUsername);
+            isAlreadyFriends.setString(3, senderUsername);
+            isAlreadyFriends.setString(4, receiverUsername);
+            try (ResultSet rs = isAlreadyFriends.executeQuery()){
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return "You are already friends with this user.";
+                }
+            }
+
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO friend_requests (sender_username, receiver_username) VALUES (?, ?)");
+            stmt.setString(1, senderUsername);
+            stmt.setString(2, receiverUsername);
+            stmt.executeUpdate();
+
+            connection.close();
+            return "Friend request sent!";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "error";
+    }
+
     public int editVotes(int postId, String username, int numvote){
         try (Connection connection = dataSource.getConnection()) {
+
+
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO votes (post_id, username, numvote) VALUES (?, ?, ?) ON CONFLICT (post_id, username) DO UPDATE SET numvote = EXCLUDED.numvote");
             stmt.setInt(1, postId);
             stmt.setString(2, username);

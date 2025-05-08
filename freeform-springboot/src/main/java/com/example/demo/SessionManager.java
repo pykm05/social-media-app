@@ -25,10 +25,22 @@ public class SessionManager {
         return sessionId;
     }
 
-    public Session validateSession(String sessionId){
+    public Session validateSession(String sessionId, String username){
         if (sessionsBySessionId.containsKey(sessionId)){
             Session tempSes = sessionsBySessionId.get(sessionId);
-            if (tempSes.isValid()){
+            if (tempSes.isValid(username)){
+                return tempSes;
+            }
+            sessionsBySessionId.remove(tempSes.sessionId);
+            sessionsByUsername.remove(tempSes.username);
+        }
+        return null;
+    }
+
+    public Session getDataIfValid(String sessionId){
+        if (sessionsBySessionId.containsKey(sessionId)){
+            Session tempSes = sessionsBySessionId.get(sessionId);
+            if (tempSes.getDataIfValid()){
                 return tempSes;
             }
             sessionsBySessionId.remove(tempSes.sessionId);
