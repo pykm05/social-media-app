@@ -14,13 +14,57 @@ function FriendRequests() {
     const handleClick = () => {
         setRequestSent(true)
     }
+    
+    const sessionId = null;
+    const [userData, setUserData] = useState(null);
 
+    let debounce = false;
     useEffect(() => {
-        setReceivedRequests(['Gustophiles', 'long nameeeeeeeeeeeee', 'j pork',
-            'j pork', 'j pork', 'j pork',
-            'j pork', 'j pork', 'j pork'
-        ]);
+        if (!debounce) {
+            checkSession();
+            setReceivedRequests(['Gustophiles', 'long nameeeeeeeeeeeee', 'j pork',
+                'j pork', 'j pork', 'j pork',
+                'j pork', 'j pork', 'j pork'
+            ]);
+            debounce = true;
+        }
     }, []);
+
+    // Session Checker
+    const checkSession = () => {
+        const cookies = document.cookie.split("; ");
+        for (let cookie of cookies){
+            const [key, SessionId] = cookie.split("=");
+            if (key === "SessionId"){
+                return fetch("http://localhost:8080/api/validatesession", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ SessionId }),
+                })
+                .then(async response => {
+                    if (!response.ok) {
+                        navigate("/login");
+                        return;
+                    }
+
+                    const tempData = await response.json();
+            
+                    if (tempData == null) {
+                        navigate("/login");
+                        return;
+                    } else {
+                        setUserData(tempData);
+                        return;
+                    }
+
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            }
+        }
+        navigate("/login");
+    };
 
     return (
         <div className="flex h-screen font-inter text-white bg-custom-dark">
@@ -35,7 +79,7 @@ function FriendRequests() {
                     </button>
 
                     <div className="flex flex-col p-4 gap-3">
-                        <button className="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Username</button>
+                        <div class = "font-bold underline text-center py-4 ">{userData?.username}</div>
                         <div className="font-bold underline text-center pb-2">Profile</div>
                         <button className="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
                         <button className="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>

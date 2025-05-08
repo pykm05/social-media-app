@@ -25,16 +25,16 @@ public class SessionManager {
         return sessionId;
     }
 
-    public Boolean validateSession(String sessionId){
+    public Session validateSession(String sessionId){
         if (sessionsBySessionId.containsKey(sessionId)){
             Session tempSes = sessionsBySessionId.get(sessionId);
             if (tempSes.isValid()){
-                return true;
+                return tempSes;
             }
             sessionsBySessionId.remove(tempSes.sessionId);
             sessionsByUsername.remove(tempSes.username);
         }
-        return false;
+        return null;
     }
 
     public void seeSessions(){

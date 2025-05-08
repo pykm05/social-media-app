@@ -85,12 +85,9 @@ public class FreeformApiController {
     }
 
     @PostMapping("/api/validatesession")
-    public String validateSession(@RequestBody Map<String, String> data){
+    public Session validateSession(@RequestBody Map<String, String> data){
         String sessionId = data.get("SessionId");
-        if (sessionManager.validateSession(sessionId)){
-            return "Valid session";
-        }
-        return "Invalid session";
+        return sessionManager.validateSession(sessionId);
     }
 
     public static String hashPassword(String password){

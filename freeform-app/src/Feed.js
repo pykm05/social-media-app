@@ -11,18 +11,59 @@ function Feed() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [posts, setPosts] = useState([]);
 
+    const sessionId = null;
+    const [userData, setUserData] = useState(null);
+
     const freeformButton = () => {
         navigate("/feed");
     };
 
     let debounce = false;
-    // Initial post loading
+    // Initial functions
     useEffect(() => {
         if (!debounce) {
+            checkSession();
+            console.log(userData);
             getPosts();
             debounce = true;
         }
     }, []);
+
+    // Session Checker
+    const checkSession = () => {
+        const cookies = document.cookie.split("; ");
+        for (let cookie of cookies){
+            const [key, SessionId] = cookie.split("=");
+            if (key === "SessionId"){
+                return fetch("http://localhost:8080/api/validatesession", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ SessionId }),
+                })
+                .then(async response => {
+                    if (!response.ok) {
+                        navigate("/login");
+                        return;
+                    }
+
+                    const tempData = await response.json();
+            
+                    if (tempData == null) {
+                        navigate("/login");
+                        return;
+                    } else {
+                        setUserData(tempData);
+                        return;
+                    }
+
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            }
+        }
+        navigate("/login");
+    };
 
     // Load posts 
     // This is all for pagination for extra credit
@@ -62,7 +103,7 @@ function Feed() {
                     </button>
 
                     <div class = "flex flex-col p-4 gap-3">
-                        <div class = "font-bold underline text-center pb-2">Username</div>
+                        <div class = "font-bold underline text-center py-4 ">{userData?.username}</div>
                         <button class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Profile</button>
                         <button class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
                         <button class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
