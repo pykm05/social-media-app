@@ -72,7 +72,7 @@ public class UserDAO {
         return "error";
     }
 
-    public List<Posts> getPosts(int numPosts, int offset){
+    public List<Posts> getPosts(int numPosts, int offset) {
         List<Posts> reqPosts = new ArrayList<Posts>();
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement getReqPosts = connection.prepareStatement("SELECT * FROM posts ORDER BY date_of_post DESC LIMIT ? OFFSET ?");
@@ -93,6 +93,26 @@ public class UserDAO {
             e.printStackTrace();
         }
         return reqPosts;
+    }
+
+    public List<Friend> getFriends(String username){
+        List<Friend> reqFriends = new ArrayList<Friend>();
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement getReqFriends = connection.prepareStatement("SELECT username2 FROM friends WHERE username1 = ? UNION SELECT username1 FROM friends WHERE username2 = ?");
+
+            getReqFriends.setString(1, username);
+            getReqFriends.setString(2, username);
+
+            try (ResultSet rs = getReqFriends.executeQuery()) {
+                while (rs.next()){
+                    reqFriends.add(new Friend(rs.getString("username2")));
+                }
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reqFriends;
     }
 
     public static String hashPassword(String password){

@@ -84,6 +84,12 @@ public class FreeformApiController {
         return dao.loginUser(username, password);
     }
 
+    @PostMapping("/api/getfriends")
+    public List<Friend> getFriends(@RequestBody Map<String, String> data){
+        String username = data.get("username");
+        return dao.getFriends(username);
+    }
+
     @PostMapping("/api/validatesession")
     public Session validateSession(@RequestBody Map<String, String> data){
         String sessionId = data.get("SessionId");
