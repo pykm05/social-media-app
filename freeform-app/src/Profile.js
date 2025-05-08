@@ -29,12 +29,15 @@ function Profile() {
     };
 
     const [userData, setUserData] = useState(null);
-    let debounce = false;
+    let debounce = 0;
+    // Initial functions
     useEffect(() => {
-        if (!debounce) {
+        if (debounce <= 1) {
             checkSession();
-            getPostsByUser();
-            debounce = true;
+            if (debounce == 1) {
+                getPostsByUser();
+            }
+            debounce += 1;
         }
     }, []);
 
@@ -48,36 +51,39 @@ function Profile() {
     // Session Checker
     const checkSession = () => {
         const cookies = document.cookie.split("; ");
-        for (let cookie of cookies) {
+        for (let cookie of cookies){
             const [key, SessionId] = cookie.split("=");
-            if (key === "SessionId") {
+            if (key === "SessionId"){
                 return fetch("http://localhost:8080/api/validatesession", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ SessionId }),
                 })
-                    .then(async response => {
-                        if (!response.ok) {
-                            navigate("/login");
-                            return;
-                        }
+                .then(async response => {
+                    if (!response.ok) {
+                        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
+                        navigate("/login");
+                        return;
+                    }
 
-                        const tempData = await response.json();
+                    const tempData = await response.json();
+            
+                    if (tempData == null) {
+                        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
+                        navigate("/login");
+                        return;
+                    } else {
+                        setUserData(tempData);
+                        return;
+                    }
 
-                        if (tempData == null) {
-                            navigate("/login");
-                            return;
-                        } else {
-                            setUserData(tempData);
-                            return;
-                        }
-
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
             }
         }
+        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
         navigate("/login");
     };
 

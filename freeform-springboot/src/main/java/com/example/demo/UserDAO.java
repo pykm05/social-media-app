@@ -108,11 +108,82 @@ public class UserDAO {
                     reqFriends.add(new Friend(rs.getString("username2")));
                 }
             }
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return reqFriends;
+    }
+
+    public List<FriendRequest> getFriendReqs(String username){
+        List<FriendRequest> friendReqs = new ArrayList<FriendRequest>();
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement getFriendReqs = connection.prepareStatement("SELECT sender_username FROM friend_requests WHERE receiver_username = ?");
+
+            getFriendReqs.setString(1, username);
+
+            try (ResultSet rs = getFriendReqs.executeQuery()) {
+                while (rs.next()){
+                    friendReqs.add(new FriendRequest(rs.getString("sender_username"), username));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return friendReqs;
+    }
+
+    public String acceptFriendReq(String senderUsername, String receiverUsername){
+        try (Connection connection = dataSource.getConnection()) {
+
+            System.out.println(senderUsername + receiverUsername);
+
+            PreparedStatement isAlreadyFriends = connection.prepareStatement("SELECT COUNT(*) FROM (SELECT username2 FROM friends WHERE username1 = ? AND username2 = ? UNION SELECT username1 FROM friends WHERE username2 = ? AND username1 = ?) AS temp");
+            isAlreadyFriends.setString(1, senderUsername);
+            isAlreadyFriends.setString(2, receiverUsername);
+            isAlreadyFriends.setString(3, senderUsername);
+            isAlreadyFriends.setString(4, receiverUsername);
+            try (ResultSet rs = isAlreadyFriends.executeQuery()){
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return "You are already friends with this user.";
+                }
+            }
+
+            PreparedStatement deleteReq = connection.prepareStatement("DELETE FROM friend_requests WHERE sender_username = ? AND receiver_username = ?");
+            deleteReq.setString(1, senderUsername);
+            deleteReq.setString(2, receiverUsername);
+            deleteReq.execute();
+
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO friends (username1, username2) VALUES (?, ?)");
+            stmt.setString(1, senderUsername);
+            stmt.setString(2, receiverUsername);
+            stmt.executeUpdate();
+
+            connection.close();
+            return "Friend request accepted";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "error";
+    }
+
+    public String declineFriendReq(String senderUsername, String receiverUsername){
+        try (Connection connection = dataSource.getConnection()) {
+
+            System.out.println(senderUsername + receiverUsername);
+
+            PreparedStatement deleteReq = connection.prepareStatement("DELETE FROM friend_requests WHERE sender_username = ? AND receiver_username = ?");
+            deleteReq.setString(1, senderUsername);
+            deleteReq.setString(2, receiverUsername);
+            deleteReq.execute();
+
+            connection.close();
+            return "Friend request declined";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "error";
     }
 
     public String createComment(int postId, String contents, String owner){
@@ -190,6 +261,14 @@ public class UserDAO {
 
     public String createFriendReq(String senderUsername, String receiverUsername){
         try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement isPerson = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ?;");
+            isPerson.setString(1, receiverUsername);
+            try (ResultSet rs = isPerson.executeQuery()){
+                if (rs.next() && rs.getInt(1) == 0) {
+                    return "This is not a valid user.";
+                }
+            }
+
             PreparedStatement uniqueness = connection.prepareStatement("SELECT" +
                     "  (SELECT COUNT(*) FROM friend_requests WHERE sender_username = ? AND receiver_username = ?) +" +
                     "  (SELECT COUNT(*) FROM friend_requests WHERE sender_username = ? AND receiver_username = ?) AS total_requests;");

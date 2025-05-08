@@ -35,13 +35,15 @@ function Feed() {
         navigate("/friendrequests");
     };
 
-    let debounce = false;
+    let debounce = 0;
     // Initial functions
     useEffect(() => {
-        if (!debounce) {
+        if (debounce <= 1) {
             checkSession();
-            getPostButton();
-            debounce = true;
+            if (debounce == 1){
+                getPostButton();
+            }
+            debounce += 1;
         }
     }, []);
 
@@ -58,6 +60,7 @@ function Feed() {
                 })
                 .then(async response => {
                     if (!response.ok) {
+                        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
                         navigate("/login");
                         return;
                     }
@@ -65,6 +68,7 @@ function Feed() {
                     const tempData = await response.json();
             
                     if (tempData == null) {
+                        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
                         navigate("/login");
                         return;
                     } else {
@@ -78,6 +82,7 @@ function Feed() {
                 });
             }
         }
+        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
         navigate("/login");
     };
 

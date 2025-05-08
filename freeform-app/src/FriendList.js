@@ -76,7 +76,7 @@ function FriendList() {
         const cookies = document.cookie.split("; ");
         for (let cookie of cookies){
             const [key, SessionId] = cookie.split("=");
-            if (key === "SessionId") {
+            if (key === "SessionId"){
                 return fetch("http://localhost:8080/api/validatesession", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -84,12 +84,15 @@ function FriendList() {
                 })
                 .then(async response => {
                     if (!response.ok) {
+                        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
                         navigate("/login");
                         return;
                     }
-                    const tempData = await response.json();
 
+                    const tempData = await response.json();
+            
                     if (tempData == null) {
+                        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
                         navigate("/login");
                         return;
                     } else {
@@ -103,6 +106,7 @@ function FriendList() {
                 });
             }
         }
+        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
         navigate("/login");
     };
 

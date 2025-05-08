@@ -123,14 +123,55 @@ public class FreeformApiController {
 
     @PostMapping("/api/sendfriendreq")
     public String sendFriendReq(@RequestBody Map<String, String> data){
-        if (sessionManager.validateSession(data.get("sessionId"), data.get("owner")) == null){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("senderUsername")) == null){
             return "Invalid session";
         }
 
         String sender = data.get("senderUsername");
         String receiver = data.get("receiverUsername");
+        System.out.println(receiver);
+
+        if (sender.equals(receiver)){
+            return "You can't send yourself a friend request.";
+        }
 
         return dao.createFriendReq(sender, receiver);
+    }
+
+    @PostMapping("/api/getfriendreqs")
+    public List<FriendRequest> getFriendReqs(@RequestBody Map<String, String> data){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("username")) == null){
+            return new ArrayList<FriendRequest>();
+        }
+
+        String username = data.get("username");
+        System.out.println(username);
+
+        return dao.getFriendReqs(username);
+    }
+
+    @PostMapping("/api/acceptfriendreq")
+    public String acceptFriendReq(@RequestBody Map<String, String> data){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("receiver")) == null){
+            return "Invalid session";
+        }
+
+        String senderUsername = data.get("sender");
+        String receiverUsername = data.get("receiver");
+
+        return dao.acceptFriendReq(senderUsername, receiverUsername);
+    }
+
+    @PostMapping("/api/declinefriendreq")
+    public String declineFriendReq(@RequestBody Map<String, String> data){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("receiver")) == null){
+            return "Invalid session";
+        }
+
+        String senderUsername = data.get("sender");
+        String receiverUsername = data.get("receiver");
+
+        return dao.declineFriendReq(senderUsername, receiverUsername);
     }
 
     @PostMapping("/api/vote")
