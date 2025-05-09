@@ -6,8 +6,6 @@ Freeform is a text-based social media platform that aims to share and cultivate 
 
  [![Skills](https://skillicons.dev/icons?i=nodejs,vite,react,spring,java,js,tailwind, )](https://skillicons.dev)
 
-You can visit the deployed website using this [WIP link](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2). 
-
 ## Getting Started
 
 These instructions will give you a copy of the project up and running on
