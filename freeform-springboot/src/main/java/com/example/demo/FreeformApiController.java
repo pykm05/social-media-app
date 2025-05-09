@@ -93,6 +93,18 @@ public class FreeformApiController {
         return dao.changeUsername(username, data.get("oldUsername"));
     }
 
+    @PostMapping("/api/deletepost")
+    public String deletePost(@RequestBody Map<String, String> data){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("username")) == null){
+            return "Invalid session";
+        }
+
+        String postId = data.get("postId");
+
+        //System.out.println(username + " | " + password);
+        return dao.deletePost(parseInt(postId), data.get("username"));
+    }
+
     @PostMapping("/api/login")
     public String loginUser(@RequestBody Map<String, String> data){
         String username = data.get("username");

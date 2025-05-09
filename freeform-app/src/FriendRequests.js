@@ -25,6 +25,10 @@ function FriendRequests() {
     const freeformButton = () => {
         navigate("/feed");
     };
+    
+    const updateUsername = () => {
+        navigate("/changeusername");
+    };
 
     const logout = () => {
         document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
@@ -162,6 +166,7 @@ function FriendRequests() {
                         <button onClick={profileButton} class="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Profile</button>
                         <button onClick={friendListButton} class="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
                         <button onClick={friendReqButton} class="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
+                        <button onClick = {updateUsername} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Update Username</button>
                     </div>
                 </div>
 

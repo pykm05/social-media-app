@@ -19,6 +19,7 @@ export function FriendRequest({ sender, receiver, receiverSessionId, onClose }) 
             if (!response.ok) throw new Error("Failed to accept");
             
             const feedbackNow = await response.text();
+            alert(feedbackNow);
 
             if (feedbackNow === "Friend request accepted"){
                 onClose();
@@ -27,6 +28,7 @@ export function FriendRequest({ sender, receiver, receiverSessionId, onClose }) 
         })
         .catch(error => {
             console.error(error);
+            alert(error);
             setIsSubmitting(false);
         });
     };
@@ -48,13 +50,17 @@ export function FriendRequest({ sender, receiver, receiverSessionId, onClose }) 
             
             const feedbackNow = await response.text();
 
+            alert(feedbackNow);
+
             if (feedbackNow === "Friend request declined"){
                 onClose();
             }
+            
             setIsSubmitting(false);
         })
         .catch(error => {
             console.error(error);
+            alert(error);
             setIsSubmitting(false);
         });
     };

@@ -2,7 +2,7 @@ import React, { use, useState } from "react";
 import { useEffect } from "react";
 import { Comment } from "./Comments";
 
-export function Post({ username, postDate, postTitle, postContent, isprofile, postId, onlineUser, onlineUserSession }) {
+export function Post({ username, postDate, postTitle, postContent, isprofile, postId, onlineUser, onlineUserSession, onClose }) {
 
     const [votes, setVotes] = useState("...");
     const [comment, setComment] = useState("");
@@ -32,7 +32,7 @@ export function Post({ username, postDate, postTitle, postContent, isprofile, po
     let debounce = false;
     useEffect(() => {
         if (debounce) return;
-        
+
         getCommentByPost();
         console.log(postId);
         fetch('http://localhost:8080/api/getvotes', {
@@ -47,8 +47,8 @@ export function Post({ username, postDate, postTitle, postContent, isprofile, po
                 setVotes("?");
                 console.error(error);
             });
-        
-            debounce = true;
+
+        debounce = true;
     }, []);
 
     const getCommentByPost = () => {
@@ -71,37 +71,73 @@ export function Post({ username, postDate, postTitle, postContent, isprofile, po
     const createComment = () => {
         if (isSubmitting) return;
         setIsSubmitting(true);
-        
+
         const owner = onlineUser;
         const sessionId = onlineUserSession;
         const contents = comment;
-        
+
         return fetch("http://localhost:8080/api/createcomment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ owner, sessionId, contents, postId }),
         })
+            .then(async response => {
+                if (!response.ok) throw new Error("Failed to create post");
+
+                const feedbackNow = await response.text();
+                setFeedback(feedbackNow);
+
+                if (feedbackNow === "Comment created!") {
+                    setComments([]);
+                    getCommentByPost();
+                }
+                setIsSubmitting(false);
+            })
+            .catch(error => {
+                console.error(error);
+                setFeedback("An error occurred while creating the post");
+                setIsSubmitting(false);
+            });
+    };
+
+    const deletePost = () => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        
+        const sessionId = onlineUserSession;
+        const username = onlineUser;
+
+        
+
+        return fetch("http://localhost:8080/api/deletepost", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sessionId, username, postId }),
+        })
         .then(async response => {
-            if (!response.ok) throw new Error("Failed to create post");
+            if (!response.ok) throw new Error("Failed to delete post");
             
             const feedbackNow = await response.text();
-            setFeedback(feedbackNow);
 
-            if (feedbackNow === "Comment created!"){
-                setComments([]);
-                getCommentByPost();
+            alert(feedbackNow);
+
+            if (feedbackNow === "post deleted"){
+                onClose();
             }
+            
             setIsSubmitting(false);
         })
         .catch(error => {
             console.error(error);
-            setFeedback("An error occurred while creating the post");
+            alert(error);
             setIsSubmitting(false);
         });
     };
 
     return (
-        <div className="flex flex-row gap-3 min-w-[450px] bg-custom-cream p-4 w-full justify-start text-left">
+        <div className="relative flex flex-row gap-3 min-w-[450px] bg-custom-cream p-4 w-full justify-start text-left">
+            <button onClick={deletePost} className = "absolute top-2 right-2 text-xs p-2 bg-black rounded-full hover:bg-red-400 text-white transition-colors w-6 h-6 items-center justify-center flex">X</button>
+
             <div className="flex flex-col items-center gap-3">
                 <button onClick={() => updateVote(1)}>
                     <img src="/svg/thumbs_up.svg" alt="Thumbs Up" width="20" />
@@ -120,15 +156,15 @@ export function Post({ username, postDate, postTitle, postContent, isprofile, po
                 <div className="text">{postContent}</div>
 
                 <div className="flex flex-col gap-1 text-xs">
-                    <div className = "flex flex-row gap-4">
-                    <button onClick={() => setShowCommentBox(prev => !prev)} className="hover:text-blue-500 text-left self-start">Comment</button>
-                    <button onClick={() => setSeeComments(prev => !prev)} className="hover:text-blue-500 text-left self-start">See Comments</button>
+                    <div className="flex flex-row gap-4">
+                        <button onClick={() => setShowCommentBox(prev => !prev)} className="hover:text-blue-500 text-left self-start">Comment</button>
+                        <button onClick={() => setSeeComments(prev => !prev)} className="hover:text-blue-500 text-left self-start">See Comments</button>
                     </div>
                     {showCommentBox && (
                         <>
                             <textarea placeholder="Comment" class="text-left" value={comment} onChange={(e) => setComment(e.target.value)} />
                             <button onClick={createComment} className="hover:text-blue-500 text-left self-start bg-gray-300 rounded p-1">Post</button>
-                            {feedback && <div class = "text-purple-500 ">{feedback}</div>}
+                            {feedback && <div class="text-purple-500 ">{feedback}</div>}
                         </>)}
 
                     {seeComments && (

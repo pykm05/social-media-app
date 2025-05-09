@@ -154,6 +154,12 @@ function Feed() {
         });
     };
 
+    const handleClose = () => {
+        setPosts([]);
+        off.current = 0;
+        getPosts(num.current, off.current);
+    };
+
     return (
         <div class = "flex h-screen font-inter text-white bg-custom-dark min-w-[750px] min-h-[500px]">
             {/* Sidebar */}
@@ -197,6 +203,7 @@ function Feed() {
                 {
                     posts.length > 0 ? (posts.map(post => (
                         <Post
+                            onClose = {handleClose}
                             username = {post.owner}
                             postDate = {post.date}
                             postTitle = {post.title}

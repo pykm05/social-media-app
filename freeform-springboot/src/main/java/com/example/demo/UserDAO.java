@@ -4,6 +4,7 @@ import org.springframework.aot.generate.GeneratedTypeReference;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import javax.xml.transform.Result;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -65,6 +66,38 @@ public class UserDAO {
 
             connection.close();
             return "username changed";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "error";
+    }
+
+    public String deletePost(int postId, String username) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement getOwner = connection.prepareStatement("SELECT owner FROM posts WHERE post_id = ?");
+            getOwner.setInt(1, postId);
+            try (ResultSet rs = getOwner.executeQuery()){
+                if (!rs.next()) {
+                    return "Post doesn't exist";
+                }
+
+                if (!rs.getString("owner").equals(username)){
+                    PreparedStatement getAdmin = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ? AND is_admin = TRUE");
+                    getAdmin.setString(1, username);
+                    try (ResultSet rs2 = getAdmin.executeQuery()){
+                        if (rs2.next() && rs2.getInt(1) == 0){
+                            return "You are not the owner of this post.";
+                        }
+                    }
+                }
+            }
+
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM posts WHERE post_id = ?");
+            stmt.setInt(1, postId);
+            stmt.executeUpdate();
+
+            connection.close();
+            return "post deleted";
         } catch (SQLException e) {
             e.printStackTrace();
         }

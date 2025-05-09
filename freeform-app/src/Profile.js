@@ -33,6 +33,10 @@ function Profile() {
         navigate("/");
     };
 
+    const updateUsername = () => {
+        navigate("/changeusername");
+    };
+
     const [userData, setUserData] = useState(null);
     let debounce = 0;
     // Initial functions
@@ -135,6 +139,11 @@ function Profile() {
             });
     };
 
+    const handleClose = () => {
+        setPosts([]);
+        getPostsByUser();
+    };
+
     return (
         <div className="flex h-screen font-inter text-white bg-custom-dark">
             {/* Sidebar */}
@@ -152,6 +161,7 @@ function Profile() {
                         <button onClick={profileButton} class="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Profile</button>
                         <button onClick={friendListButton} class="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
                         <button onClick={friendReqButton} class="w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
+                        <button onClick = {updateUsername} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Update Username</button>
                     </div>
                 </div>
 
@@ -187,6 +197,7 @@ function Profile() {
                         {
                             posts.length > 0 ? (posts.map(post => (
                                 <Post
+                                    onClose = {handleClose}
                                     username={post.owner}
                                     postDate={post.date}
                                     postTitle={post.title}

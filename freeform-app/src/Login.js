@@ -40,7 +40,7 @@ function Login() {
             if (!response.ok) throw new Error("Failed to create user");
             
             const feedbackNow = await response.text();
-    
+
             if (feedbackNow.match(uuidRegex)) {
                 const date = new Date();
                 date.setTime(date.getTime() + (20 * 60 * 1000));
@@ -48,7 +48,8 @@ function Login() {
                 navigate("/feed");
                 setFeedback("Logged In");
             }
-    
+
+            setFeedback(feedbackNow);
             setIsSubmitting(false);
         })
         .catch(error => {
