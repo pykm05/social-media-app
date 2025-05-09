@@ -15,6 +15,7 @@ import Feed from "./Feed.js"
 import Profile from "./Profile.js"
 import FriendRequests from "./FriendRequests.js"
 import FriendList from "./FriendList.js"
+import ChangeUsername from "./UpdateUsername.js"
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path = "/profile/:username" element = {<Profile/>}/>
         <Route path = "/friendlist" element = {<FriendList/>}/>
         <Route path = "/friendrequests" element = {<FriendRequests/>}/>
+        <Route path = "/changeusername" element = {<ChangeUsername/>}/>
       </Routes>
     </Router>
   );

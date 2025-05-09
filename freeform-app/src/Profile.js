@@ -28,6 +28,11 @@ function Profile() {
         navigate("/friendrequests");
     };
 
+    const logout = () => {
+        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
+        navigate("/");
+    };
+
     const [userData, setUserData] = useState(null);
     let debounce = 0;
     // Initial functions
@@ -151,7 +156,7 @@ function Profile() {
                 </div>
 
                 <div>
-                    <button class="text-xl p-4 w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors border-t">
+                    <button onClick={logout} class="text-xl p-4 w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors border-t">
                         Logout
                     </button>
                 </div>

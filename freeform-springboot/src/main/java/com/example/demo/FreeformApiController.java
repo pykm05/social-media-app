@@ -75,6 +75,24 @@ public class FreeformApiController {
         return dao.createUser(username, hashPassword(password));
     }
 
+    @PostMapping("/api/changeusername")
+    public String changeUsername(@RequestBody Map<String, String> data){
+        if (sessionManager.validateSession(data.get("sessionId"), data.get("oldUsername")) == null){
+            return "Invalid session";
+        }
+
+        String username = data.get("username");
+
+        if (username.contains(" ")) {
+            return "Username cannot contain spaces";
+        } else if (username.length() > 50 || username.length() < 4) {
+            return "Username is invalid (4-50 characters)";
+        }
+
+        //System.out.println(username + " | " + password);
+        return dao.changeUsername(username, data.get("oldUsername"));
+    }
+
     @PostMapping("/api/login")
     public String loginUser(@RequestBody Map<String, String> data){
         String username = data.get("username");
@@ -114,7 +132,7 @@ public class FreeformApiController {
         String contents = data.get("contents");
         String postId = data.get("postId");
 
-        if (contents.length() <= 4 || contents.length() >= 256){
+        if (contents.length() < 4 || contents.length() > 256){
             return "Content is invalid (4-256 characters)";
         }
 
@@ -204,11 +222,11 @@ public class FreeformApiController {
         String title = data.get("title");
         String contents = data.get("contents");
 
-        if (title.length() >= 50 || title.length() <= 4) {
+        if (title.length() > 50 || title.length() < 4) {
             return "Title is invalid (4-50 characters)";
         }
 
-        if (contents.length() <= 4 || contents.length() >= 256){
+        if (contents.length() < 4 || contents.length() > 256){
             return "Content is invalid (4-256 characters)";
         }
 

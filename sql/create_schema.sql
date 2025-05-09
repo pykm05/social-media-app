@@ -14,16 +14,26 @@ CREATE TABLE friends(
   username1 VARCHAR(50) NOT NULL,
   username2 VARCHAR(50) NOT NULL,
   CHECK (username1 <> username2),
-  FOREIGN KEY (username1) REFERENCES users(username),
+  FOREIGN KEY (username1) REFERENCES users(username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   FOREIGN KEY (username2) REFERENCES users(username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  PRIMARY KEY (username1, username2)
 );
 
 CREATE TABLE friend_requests(
   sender_username VARCHAR(50) NOT NULL,
   receiver_username VARCHAR(50) NOT NULL,
   CHECK (sender_username <> receiver_username),
-  FOREIGN KEY (sender_username) REFERENCES users(username),
-  FOREIGN KEY (receiver_username) REFERENCES users(username)
+  FOREIGN KEY (sender_username) REFERENCES users(username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (receiver_username, receiver_username) REFERENCES users(username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  PRIMARY KEY (sender_username, receiver_username)
 );
 
 CREATE TABLE Posts(

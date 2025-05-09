@@ -23,6 +23,11 @@ function FriendList() {
         navigate("/friendrequests");
     };
 
+    const logout = () => {
+        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
+        navigate("/");
+    };
+
     const [friends, setFriends] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -131,7 +136,7 @@ function FriendList() {
                 </div>
 
                 <div>
-                    <button className="text-xl p-4 w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors border-t">
+                    <button onClick={logout} className="text-xl p-4 w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors border-t">
                         Logout
                     </button>
                 </div>

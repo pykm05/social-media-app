@@ -48,6 +48,29 @@ public class UserDAO {
         return "error";
     }
 
+    public String changeUsername(String username, String oldUsername) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement uniqueness = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ?");
+            uniqueness.setString(1, username);
+            try (ResultSet rs = uniqueness.executeQuery()){
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return "username taken";
+                }
+            }
+
+            PreparedStatement stmt = connection.prepareStatement("UPDATE users SET username = ? WHERE username = ?");
+            stmt.setString(1, username);
+            stmt.setString(2, oldUsername);
+            stmt.executeUpdate();
+
+            connection.close();
+            return "username changed";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "error";
+    }
+
     public String loginUser(String username, String password) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement getPassword = connection.prepareStatement("SELECT password FROM users WHERE username = ?");

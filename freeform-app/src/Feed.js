@@ -35,6 +35,15 @@ function Feed() {
         navigate("/friendrequests");
     };
 
+    const updateUsername = () => {
+        navigate("/changeusername");
+    };
+
+    const logout = () => {
+        document.cookie = "SessionId=;expires=Mon, 01 Jan 1000 00:00:00 UTC;path=/";
+        navigate("/");
+    };
+
     let debounce = 0;
     // Initial functions
     useEffect(() => {
@@ -162,11 +171,12 @@ function Feed() {
                         <button onClick = {profileButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Profile</button>
                         <button onClick = {friendListButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend List</button>
                         <button onClick = {friendReqButton} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Friend Requests</button>
+                        <button onClick = {updateUsername} class = "w-full hover:bg-custom-dark4 rounded py-3 transition-colors">Update Username</button>
                     </div>
                 </div>
 
                 <div>
-                    <button class = "text-xl p-4 w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors border-t">
+                    <button onClick={logout} class = "text-xl p-4 w-full text-red-300 hover:bg-red-400 hover:text-white transition-colors border-t">
                         Logout
                     </button>
                 </div>
