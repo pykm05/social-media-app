@@ -209,7 +209,7 @@ function Profile() {
                                 />
                             ))
                             ) : (
-                                <div>no posts</div>
+                                <div class = "text-white">no posts</div>
                             )
                         }
                     </div>
