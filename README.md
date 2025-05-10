@@ -30,7 +30,8 @@ Paste the information in the application.properties file located in path:
 
     /freeform-springboot/src/main/resources
 
-In your IDE or terminal, run:
+Do keep in mind that the backend is a **Maven Project** which may require you to install some dependencies. We recommend using the Intellij IDE as they deal with it for you.
+In your IDE (Intellij is preferred), run:
 
     FreeformSpringbootApplication.java
 
