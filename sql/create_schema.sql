@@ -30,14 +30,14 @@ CREATE TABLE friend_requests(
   FOREIGN KEY (sender_username) REFERENCES users(username)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  FOREIGN KEY (receiver_username, receiver_username) REFERENCES users(username)
+  FOREIGN KEY (receiver_username) REFERENCES users(username)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   PRIMARY KEY (sender_username, receiver_username)
 );
 
 CREATE TABLE Posts(
-  post_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  post_id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(50) NOT NULL,
   contents VARCHAR(256) NOT NULL,
   owner VARCHAR(50) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE Votes(
 );
 
 CREATE TABLE comment(
-  comment_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  comment_id INT AUTO_INCREMENT PRIMARY KEY,
   contents VARCHAR(256) NOT NULL,
   owner VARCHAR(50) NOT NULL,
   date_of_post DATE NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE comment(
     ON UPDATE CASCADE,
   FOREIGN KEY (post_id) REFERENCES Posts(post_id)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
+    ON UPDATE CASCADE
 );
 
 -- DATA INITIALIZATION IN THE OTHER FILE
