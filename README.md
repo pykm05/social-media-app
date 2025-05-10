@@ -4,7 +4,7 @@
 
 Freeform is a text-based social media platform that aims to share and cultivate discussion around thoughts, moments, and ideas from users of all backgrounds, using text as the sole medium of communication. 
 
- [![Skills](https://skillicons.dev/icons?i=nodejs,vite,react,spring,java,js,tailwind, )](https://skillicons.dev)
+ [![Skills](https://skillicons.dev/icons?i=nodejs,react,spring,java,js,tailwind, )](https://skillicons.dev)
 
 ## Getting Started
 
@@ -31,7 +31,7 @@ Paste the information in the application.properties file located in path:
     /freeform-springboot/src/main/resources
 
 Do keep in mind that the backend is a **Maven Project** which may require you to install some dependencies. We recommend using the Intellij IDE as they deal with it for you.
-In your IDE (Intellij is preferred), run:
+In your IDE, run:
 
     FreeformSpringbootApplication.java
 
