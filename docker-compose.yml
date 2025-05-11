@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  freeform-app:
+    build: ./freeform-app
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    command: npm start
+    depends_on:
+      - freeform-springboot
+
+  freeform-springboot:
+    build: ./freeform-springboot
+    ports:
+      - "8080:8080"
+    working_dir: /app
+    command: java -jar demo.jar
